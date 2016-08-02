@@ -1,0 +1,35 @@
+﻿{
+    "name": "SimpleWeb",
+    "background": {
+        "page": "background.html"
+    },
+    "version": "0.0.1",
+    "options_page": "options.html",
+    "content_security_policy": "script-src 'self'; object-src",
+    "description": "Simple Web",
+    "icons": {
+        "128": "e128.png",
+        "48": "e128.png",
+        "16": "e128.png"
+    },
+    "manifest_version": 2,
+
+    "content_scripts": [{
+        "matches": ["*://*/*.txt"],
+        "css": [
+            "simpleweb.css"
+        ],
+        "js": [
+            "lib/jquery.js",
+            "SimpleWeb.js",
+            "simpleweb-main.js"
+        ],
+        "run_at": "document_end"
+    }],
+
+    "permissions": [
+        "tabs",
+        "activeTab",
+        "<all_urls>"
+    ]
+}
