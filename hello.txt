@@ -1,0 +1,27 @@
+
+Hello, Simple Web!
+
+軽量なウェブページの実現と、読者がページデザインを自由に選択できるウェブページを目指すプロジェクトです。
+
+ただのテキストファイルを配信している新しいスタイルのウェブページです。
+予め"専用のChrome拡張機能(*1)"をインストールしておくと、自動的にページがレイアウトされます。
+将来的にはいくつかのテンプレートのなかからお好みのウェブページデザインを選択できます。
+
+写真も展開されます。
+"肉だけど寿司[*2]"
+
+作者
+
+- "@daizplus(*3)"
+- "ブログ(*4)"
+
+おまけ
+
+- "自動レイアウト無効バージョン(*5)"
+
+
+*1: https://github.com/daiz713/SimpleWebPage
+*2: http://images.miil.me/i/08bdc09a-4fee-11e5-a24a-22000aba161e.jpg 300 300
+*3: https://twitter.com/daizplus
+*4: http://daiiz.hatenablog.com/
+*5: https://daiiz-apps.appspot.com/1/hello.txt
