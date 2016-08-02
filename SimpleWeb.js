@@ -178,10 +178,10 @@ class SimpleWeb {
             "simpleweb.css"
         ];
         csss.forEach(css => {
-            this.$stage.append($(`<link rel="stylesheet" type="text/css" href="${chrome.extension.getURL(css)}">`));
+            this.$stage.find('#stage-simple-web').append($(`<link rel="stylesheet" type="text/css" href="${chrome.extension.getURL(css)}">`));
         });
         htmls.forEach(html => {
-            this.$stage.append($(html));
+            this.$stage.find('#stage-simple-web').append($(html));
         });
     }
 
