@@ -17,7 +17,6 @@
     "content_scripts": [{
         "matches": ["*://*/*.txt"],
         "css": [
-            "simpleweb.css"
         ],
         "js": [
             "lib/jquery.js",
@@ -26,6 +25,10 @@
         ],
         "run_at": "document_end"
     }],
+
+    "web_accessible_resources": [
+        "simpleweb.css"
+    ],
 
     "permissions": [
         "tabs",

@@ -11,9 +11,13 @@ class SimpleWeb {
 
         // CSSクラス
         this.css = {
-            "title": "simpleweb-title",
-            "txt"  : "simpleweb-txt",
-            "item" : "simpleweb-item"
+            "title"      : "simpleweb-title",
+            "txt"        : "simpleweb-txt",
+            "item"       : "simpleweb-item",
+            "a"          : "simpleweb-a",
+            "img_wrap"   : "simpleweb-img-wrap",
+            "img"        : "simpleweb-img",
+            "img_caption": "simpleweb-img-caption"
         }
     }
 
@@ -31,8 +35,8 @@ class SimpleWeb {
             if (a.indexOf(':') === -1) return false;
             res.num = a.split(':')[0].replace('*', '');
             var url = "";
-            for (var i = 1; i < a.split(':').length; i++) url += a.split(':')[i];
-            res.url = url.trim();
+            for (var i = 1; i < a.split(':').length; i++) url = url + a.split(':')[i] + ':';
+            res.url = url.substring(0, url.length - 1).trim();
             return res;
         };
 
@@ -94,14 +98,30 @@ class SimpleWeb {
                     var b = link.replace(/\"/gi, '');
                     if (b.indexOf('(*') !== -1 && b.indexOf(')') !== -1) {
                         // a
-                        var noteNum = b.match(/\(\*.+\)/)[0].replace('(*', '').replace(')', '');
-                        var url = self.notes['note_' + noteNum];
-                        console.info(url);
+                        var m = b.match(/\(\*.+\)/)[0];
+                        var noteNum = m.replace('(*', '').replace(')', '');
+                        var url = this.notes['note_' + noteNum];
+                        var aTag = `<a href="${url}" target="_blank" class="${this.css.a}">${b.replace(m, '')}</a>`;
+                        a = a.replace(link, aTag);
                     }else if (b.indexOf('[') !== -1 && b.indexOf(']') !== -1){
                         // img
+                        var m = b.match(/\[\*.+\]/)[0];
+                        var noteNum = m.replace('[*', '').replace(']', '');
+                        var url = this.notes['note_' + noteNum];
+                        var size = "";
+                        var urls = url.split(' ');
+                        if (urls.length === 3) {
+                            url = urls[0];
+                            size = `width:${urls[1]}px; height: ${urls[2]}px`;
+                        }
+                        var imgTag = `<div class="${this.css.img_wrap}">
+                                          <img src="${url}" style="${size}" class="${this.css.img}"><br>
+                                          <span class="${this.css.img_caption}">${b.replace(m, '')}</span>
+                                      </div>`
+                        a = a.replace(link, imgTag);
                     }else {
                         // a
-                        var aTag = `<a href="#">${b}</a>`;
+                        var aTag = `<a href="#" class="${this.css.a}">${b}</a>`;
                         a = a.replace(link, aTag);
                     }
                 }
@@ -151,8 +171,15 @@ class SimpleWeb {
       */
     renderHTML () {
         if (this.$stage.length === 0) return;
-
+        document.title = this.rows[0] || ":";
         var htmls = this.htmls;
+
+        var csss = [
+            "simpleweb.css"
+        ];
+        csss.forEach(css => {
+            this.$stage.append($(`<link rel="stylesheet" type="text/css" href="${chrome.extension.getURL(css)}">`));
+        });
         htmls.forEach(html => {
             this.$stage.append($(html));
         });
