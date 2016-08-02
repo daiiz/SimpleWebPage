@@ -22,24 +22,7 @@ class SimpleWeb {
      */
     parse () {
         this.rows = this.rawText.split('\n');
-        return true;
-    }
-
-    /**
-     * rowsをもとにhtmlsを構築する
-     */
-    constructHTML () {
-        if (this.htmls.length !== 0) {
-            this.htmls = [];
-            this.notes = {};
-        }
-
-        var isTitle = (a, b, c) => {
-            if (a === undefined || b === undefined || c === undefined) return false;
-            if (a !== "" || c !== "") return false;
-            if (b === "") return false;
-            return `<h1 class="${this.css.title}">${b}</h1>`;
-        };
+        var newRows = [];
 
         var isNote = (a) => {
             var res = {};
@@ -51,6 +34,40 @@ class SimpleWeb {
             for (var i = 1; i < a.split(':').length; i++) url += a.split(':')[i];
             res.url = url.trim();
             return res;
+        };
+
+        // 脚注を最初に回収する
+        for (var i = 0; i < this.rows.length; i++) {
+            // 脚注であるかどうか判定
+            var note = isNote(this.rows[i]);
+            if (note) {
+                this.notes["note_" + note.num] = note.url;
+                continue;
+            }else {
+                newRows.push(this.rows[i]);
+            }
+        }
+
+        this.rows = newRows;
+        return true;
+    }
+
+    /**
+     * rowsをもとにhtmlsを構築する
+     */
+    constructHTML () {
+        var self = this;
+
+        if (this.htmls.length !== 0) {
+            this.htmls = [];
+            this.notes = {};
+        }
+
+        var isTitle = (a, b, c) => {
+            if (a === undefined || b === undefined || c === undefined) return false;
+            if (a !== "" || c !== "") return false;
+            if (b === "") return false;
+            return `<h1 class="${this.css.title}">${b}</h1>`;
         };
 
         var isBlank = (a) => {
@@ -68,22 +85,26 @@ class SimpleWeb {
 
         var makeTxt = (a, wrapSpan=true) => {
             if (a === undefined || a.length === '') return false;
+            a = a.trim();
 
-            var text = a;
-            var links = text.match(/\"[^\"]+\"/g);
+            var links = a.match(/\"[^\"]+\"/g);
             if (links !== null) {
-                links.forEach(link => {
+                for (var i = 0; i < links.length; i++) {
+                    var link = links[i];
                     var b = link.replace(/\"/gi, '');
-                    console.info(b)
-                    if (b.indexOf('(') !== -1 && b.indexOf(')') !== -1) {
+                    if (b.indexOf('(*') !== -1 && b.indexOf(')') !== -1) {
                         // a
+                        var noteNum = b.match(/\(\*.+\)/)[0].replace('(*', '').replace(')', '');
+                        var url = self.notes['note_' + noteNum];
+                        console.info(url);
                     }else if (b.indexOf('[') !== -1 && b.indexOf(']') !== -1){
                         // img
                     }else {
                         // a
-
+                        var aTag = `<a href="#">${b}</a>`;
+                        a = a.replace(link, aTag);
                     }
-                });
+                }
             }
 
             if (wrapSpan) return `<span class="${this.css.txt}">${a}</span><br>`;
@@ -100,13 +121,6 @@ class SimpleWeb {
             if (title) {
                 this.htmls.push(title);
                 i = i + 2;
-                continue;
-            }
-
-            // 脚注であるかどうか判定
-            var note = isNote(rows[i]);
-            if (note) {
-                this.notes["note_" + note.num] = note.url;
                 continue;
             }
 
