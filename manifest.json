@@ -24,6 +24,15 @@
             "simpleweb-main.js"
         ],
         "run_at": "document_end"
+    },
+    {
+        "matches": ["*://*/*.txt?swp"],
+        "css": [
+            "base.css"
+        ],
+        "js": [
+        ],
+        "run_at": "document_start"
     }],
 
     "web_accessible_resources": [
