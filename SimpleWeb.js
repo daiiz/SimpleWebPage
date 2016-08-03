@@ -174,14 +174,18 @@ class SimpleWeb {
         document.title = this.rows[0] || ":";
         var htmls = this.htmls;
 
+        htmls.forEach(html => {
+            this.$stage.find('#stage-simple-web').append($(html));
+        });
+    }
+
+    insertCSS () {
+        $('head').append($(`<meta charset="utf-8">`));
         var csss = [
             "simpleweb.css"
         ];
         csss.forEach(css => {
-            this.$stage.find('#stage-simple-web').append($(`<link rel="stylesheet" type="text/css" href="${chrome.extension.getURL(css)}">`));
-        });
-        htmls.forEach(html => {
-            this.$stage.find('#stage-simple-web').append($(html));
+            $('head').append($(`<link rel="stylesheet" type="text/css" href="${chrome.extension.getURL(css)}">`));
         });
     }
 
