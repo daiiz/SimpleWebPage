@@ -21,6 +21,7 @@
         "js": [
             "lib/jquery.js",
             "SimpleWeb.js",
+            "WikidataTriples.js",
             "simpleweb-main.js"
         ],
         "run_at": "document_end"

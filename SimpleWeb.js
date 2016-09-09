@@ -1,5 +1,6 @@
 class SimpleWeb {
     constructor ($raw) {
+        this.insertCSS();
         this.$raw = $raw;
         this.rawText = $raw[0].innerText;
         this.rows = [];
