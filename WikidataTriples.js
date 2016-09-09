@@ -41,11 +41,7 @@ class WikidataTriples extends SimpleWeb {
 
                 this.htmls.push(triple);
                 continue;
-            }else {
-                continue;
             }
-
-            this.htmls.push(row);
         }
     }
 }
